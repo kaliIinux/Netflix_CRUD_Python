@@ -1,6 +1,7 @@
 import inquirer
 
 def menu():
+    
     while True:
         questions = [
         inquirer.List('option',
