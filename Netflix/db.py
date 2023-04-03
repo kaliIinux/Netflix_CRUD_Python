@@ -1,18 +1,3 @@
-import mysql.connector
-
-try:
-    conexao = mysql.connector.connect(user='nslvj2e7xmgdguvabtl0', password='pscale_pw_7xkV1dhLie6HzIGysMvkBLaiOg8U79hSXApOkzqPxHa', host='aws.connect.psdb.cloud', database='netflix')
-    cursor = conexao.cursor()
-    
-except Exception as e:
-    print('Conection failed, try again')
-    
-else:
-    conexao.is_connected()
-    
-finally:
-    cursor.close()
-    conexao.close()
 
     """
     CREATE TABLES:
@@ -36,6 +21,24 @@ CREATE TABLE `filmes` (
  ) ENGINE InnoDB,
  CHARSET utf8mb4,
  COLLATE utf8mb4_0900_ai_ci;
+ 
+ import mysql.connector
+
+try:
+    conexao = mysql.connector.connect(user='nslvj2e7xmgdguvabtl0', password='pscale_pw_7xkV1dhLie6HzIGysMvkBLaiOg8U79hSXApOkzqPxHa', host='aws.connect.psdb.cloud', database='netflix')
+    cursor = conexao.cursor()
+    
+except Exception as e:
+    print('Conection failed, try again')
+    
+else:
+    conexao.is_connected()
+    
+finally:
+    cursor.close()
+    conexao.close()
     
     """
+    
+
 

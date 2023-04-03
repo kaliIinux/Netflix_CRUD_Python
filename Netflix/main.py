@@ -32,4 +32,5 @@ def menu_main():
         else:
             exit()
 
-menu_main()
+if __name__ == "__main__" :
+    menu_main()

@@ -4,7 +4,7 @@ import mysql.connector, inquirer, time
 class Film():
     
     def __init__(self):
-        self.__conexao = mysql.connector.connect(user='ud5oh01997pbaodhbmps', password='pscale_pw_FW04EYmmsYOCoMFeiV0oD0VXm18vgXi1lDzdHTNc0mP', host='aws.connect.psdb.cloud', database='db-netflix')#(user='root', password='', host='127.0.0.1', database='db')
+        self.__conexao = mysql.connector.connect(user='pwpb2tbqe0be9vouc8bz', password='pscale_pw_X8PeFwzAyVOWgNAthIlT7KK9v2dGDKlqJfmjQBiylWx', host='aws.connect.psdb.cloud', database='db-netflix')#(user='root', password='', host='127.0.0.1', database='db')
         self.__cursor = self.__conexao.cursor()
     
         
