@@ -1,15 +1,41 @@
 import mysql.connector
 
+try:
+    conexao = mysql.connector.connect(user='nslvj2e7xmgdguvabtl0', password='pscale_pw_7xkV1dhLie6HzIGysMvkBLaiOg8U79hSXApOkzqPxHa', host='aws.connect.psdb.cloud', database='netflix')
+    cursor = conexao.cursor()
+    
+except Exception as e:
+    print('Conection failed, try again')
+    
+else:
+    conexao.is_connected()
+    
+finally:
+    cursor.close()
+    conexao.close()
 
-conexao = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='netflix')
-cursor = conexao.cursor()
+    """
+    CREATE TABLES:
+    
+CREATE TABLE `filmes` (
+ `id_filmes` int NOT NULL AUTO_INCREMENT,
+ `nome` varchar(50),
+ `classificacao` int,
+ `descricao` varchar(50),
+ PRIMARY KEY (`id_filmes`)
+ ) ENGINE InnoDB,
+ CHARSET utf8mb4,
+ COLLATE utf8mb4_0900_ai_ci;
+ 
+ CREATE TABLE `usuarios` (
+ `id` int NOT NULL AUTO_INCREMENT,
+ `name` varchar(50),
+ `plan` varchar(50),
+ `type` varchar(50),
+ PRIMARY KEY (`id`)
+ ) ENGINE InnoDB,
+ CHARSET utf8mb4,
+ COLLATE utf8mb4_0900_ai_ci;
+    
+    """
 
-cursor.close()
-conexao.close()
-
-nome_produto = "chocolate"
-valor = 5
-comando = f'INSERT INTO vendas (nome_produto, valor) VALUES ("{nome_produto}", {valor})' # ESCREVE O COMANDO
-cursor.execute(comando) # MANDA O COMANDO SER EXECUTADO
-conexao.commit() # EDITA O BANCO DE DADOS(CRIAR, EDITAR OU DELETAR)
-resultado = cursor.fetchall() #LER O BANCO DE DADOS
