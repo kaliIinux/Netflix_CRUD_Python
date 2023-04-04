@@ -27,6 +27,7 @@ def menu_main():
                 menu_films()  
         
         elif choice == 'USER SETTINGS':
+            print("\x1b[2J\x1b[1;1H", end="")
             menu_users()
         
         else:

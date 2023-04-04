@@ -1,10 +1,11 @@
 import mysql.connector, inquirer, time
+from prettytable import PrettyTable
 
 
 class Film():
     
     def __init__(self):
-        self.__conexao = mysql.connector.connect(user='ud5oh01997pbaodhbmps', password='pscale_pw_FW04EYmmsYOCoMFeiV0oD0VXm18vgXi1lDzdHTNc0mP', host='aws.connect.psdb.cloud', database='db-netflix')#(user='root', password='', host='127.0.0.1', database='db')
+        self.__conexao = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='db')
         self.__cursor = self.__conexao.cursor()
     
         
@@ -26,8 +27,15 @@ class Film():
         """
         
         self.__cursor.execute(f'SELECT * FROM filmes;')
-        print(self.__cursor.fetchall())
-    
+        lines = self.__cursor.fetchall()
+        tabel = PrettyTable()
+        tabel.field_names = ["ID", "NAME", "CLASS", "DESC"]
+        
+        for line in lines:
+            tabel.add_row(line)
+            
+        print(tabel)
+        
     def get_movie(self, name: str):
         
         """
@@ -117,7 +125,7 @@ class Film():
         Função para remover um filme
         com base na sua classificação 
         indicativa
-        """
+        """ 
         
         self.__cursor.execute(f'DELETE FROM filmes where classificacao = {classificacao};')
         self.__conexao.commit()
@@ -141,7 +149,7 @@ def Create():
     
     print("\x1b[2J\x1b[1;1H", end="")
     film = Film()
-    film.add(nome=input("Digite o nome do filme: "), classificacao=input("Digite a classificação: "), desc=input("Insira a descrição do filme: "))
+    film.add(nome=input("Imput movie name: "), classificacao=input("Imput the classification: "), desc=input("Imput the description of movie: "))
 
 def Read():
     
@@ -155,8 +163,8 @@ def Read():
     while True:
         questions = [
             inquirer.List('option',
-                            message="O que você deseja fazer?",
-                            choices=['LISTAR TODOS OS FILMES', 'LISTAR FILME ESPECÍFICO', 'LISTAR FILMES POR CLASSIFICAÇÃO', 'BACK'],
+                            message="What do you want to do?",
+                            choices=['READ ALL MOVIES', 'READ SPECIFIC MOVIE', 'READ MOVIES BY CLASSIFICATION', 'BACK'],
                         ),
             ]
         
@@ -166,18 +174,18 @@ def Read():
         film = Film()
         
         print("\x1b[2J\x1b[1;1H", end="")
-        if choice == 'LISTAR TODOS OS FILMES':
+        if choice == 'READ ALL MOVIES':
         
-            print("FILMES CADASTRADOS:")
+            print("ALL MOVIES:")
             print(film.get_all())
             time.sleep(3)
             print("\x1b[2J\x1b[1;1H", end="")
             
-        elif choice == 'LISTAR FILME ESPECÍFICO':
-            film.get_movie(name=input("DIGITE O NOME DO FILME: "))
+        elif choice == 'READ SPECIFIC MOVIE':
+            film.get_movie(name=input("Input the name of movie: "))
 
-        elif choice ==  'LISTAR FILMES POR CLASSIFICAÇÃO':
-            film.get_movie_class(classificacao=input("DIGITE A CLASSIFICAÇÃO DO FILME: "))
+        elif choice ==  'READ MOVIES BY CLASSIFICATION':
+            film.get_movie_class(classificacao=input("Input movie classification: "))
             
         else:
             break
@@ -194,8 +202,8 @@ def Update():
     while True:
         questions = [
                 inquirer.List('option',
-                                message="O que você deseja fazer?",
-                                choices=['ATUALIZAR ID', 'ATUALIZAR NOME', 'ATUALIZAR CLASSIFICAÇÃO', 'ATUALIZAR DESCRIÇÃO', 'BACK'],
+                                message="What do you want to do?",
+                                choices=['UPDATE ID', 'UPDATE NAME', 'UPDATE CLASSIFICATION', 'UPDATE DESCRIPTION', 'BACK'],
                             ),
                 ]
             
@@ -205,17 +213,17 @@ def Update():
         film = Film()
         
         print("\x1b[2J\x1b[1;1H", end="")
-        if choice == 'ATUALIZAR ID':
-            film.update_id(id= input("Digite o novo id: "), name= input("Qual o nome do filme? "))
+        if choice == 'UPDATE ID':
+            film.update_id(id= input("Input new ID: "), name= input("What is the name of movie? "))
             
-        elif choice == 'ATUALIZAR NOME':
-            film.update_name(name= input("Digite o novo nome: "), id= input("ID do filme: "))
+        elif choice == 'UPDATE NAME':
+            film.update_name(name= input("Input the new name: "), id= input("movie ID: "))
             
-        elif choice == 'ATUALIZAR CLASSIFICAÇÃO':
-            film.update_class(classificacao= input("Digite a nova classificação: "), name= input("nome do filme: "))
+        elif choice == 'UPDATE CLASSIFICATION':
+            film.update_class(classificacao= input("Input the new classification: "), name= input("movie name: "))
             
-        elif choice == 'ATUALIZAR DESCRIÇÃO':
-            film.update_desc(desc= input("Digite a nova descrição: "), name= input("nome do filme: "))
+        elif choice == 'UPDATE DESCRIPTION':
+            film.update_desc(desc= input("Input the new description: "), name= input("movie name: "))
     
         else:
             break
@@ -233,9 +241,9 @@ def Remove():
     while True:
         questions = [
             inquirer.List('option',
-                            message="O que você deseja fazer?",
-                            choices=['REMOVER TODOS OS FILMES', 'REMOVER FILME ESPECÍFICO',
-                                    'REMOVER FILME POR CLASSIFICAÇÃO', 'REMOVER FILME POR DESCRIÇÃO', 'BACK'],
+                            message="What do you want to do?",
+                            choices=['REMOVE ALL MOVIES', 'REMOVE SPECIFY MOVIE',
+                                    'REMOVE MOVIE BY CLASSIFICATION', 'REMOVE MOVIE BY DESCRIPTION', 'BACK'],
                         ),
             ]
         
@@ -245,17 +253,17 @@ def Remove():
         film = Film()
         
         print("\x1b[2J\x1b[1;1H", end="")
-        if choice == 'REMOVER TODOS OS FILMES':
+        if choice == 'REMOVE ALL MOVIES':
             film.remove_all()
         
-        elif choice == 'REMOVER FILME ESPECÍFICO':
-            film.remove_movie(name=input("DIGITE O NOME DO FILME: "))
+        elif choice == 'REMOVE SPECIFY MOVIE':
+            film.remove_movie(name=input("Input movie name: "))
             
-        elif choice == 'REMOVER FILME POR CLASSIFICAÇÃO':
-            film.remove_movie_class(classificacao=input("DIGITE A CLASSIFICAÇÃO DO FILME: "))
+        elif choice == 'REMOVE MOVIE BY CLASSIFICATION':
+            film.remove_movie_class(classificacao=input("Input movie classification: "))
         
-        elif choice == 'REMOVER FILME POR DESCRIÇÃO':
-            film.remove_movie_desc(desc=input("DIGITE A DESCRIÇÃO: "))
+        elif choice == 'REMOVE MOVIE BY DESCRIPTION':
+            film.remove_movie_desc(desc=input("Input the description: "))
             
         else: 
             print("\x1b[2J\x1b[1;1H", end="") 
@@ -269,27 +277,27 @@ def menu_films():
         
         questions = [
             inquirer.List('option',
-                            message="O que você deseja fazer?",
-                            choices=['ADICIONAR FILMES', 'VER FILMES', 'ATUALIZAR FILMES', 'REMOVER FILMES', 'BACK'],
+                            message="What do you want to do",
+                            choices=['ADD MOVIES', 'READ MOVIES', 'UPDATE MOVIES', 'REMOVE MOVIES', 'BACK'],
                         ),
             ]
         
         answers = inquirer.prompt(questions)
         choice = answers['option']
         
-        if choice == 'ADICIONAR FILMES':
+        if choice == 'ADD MOVIES':
             print("\x1b[2J\x1b[1;1H", end="")
             Create()
 
-        elif choice == 'VER FILMES':
+        elif choice == 'READ MOVIES':
             print("\x1b[2J\x1b[1;1H", end="")
             Read()
         
-        elif choice == 'ATUALIZAR FILMES':
+        elif choice == 'UPDATE MOVIES':
             print("\x1b[2J\x1b[1;1H", end="")
             Update()
                     
-        elif choice == 'REMOVER FILMES':
+        elif choice == 'REMOVE MOVIES':
             print("\x1b[2J\x1b[1;1H", end="")
             Remove()
             

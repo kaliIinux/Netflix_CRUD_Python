@@ -4,17 +4,17 @@ import inquirer
 class User:
     
     def __init__(self):
-        self.__conexao = mysql.connector.connect(user='ud5oh01997pbaodhbmps', password='pscale_pw_FW04EYmmsYOCoMFeiV0oD0VXm18vgXi1lDzdHTNc0mP', host='aws.connect.psdb.cloud', database='db-netflix')#(user='root', password='', host='127.0.0.1', database='db')
+        self.__conexao = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='db')
         self.__cursor = self.__conexao.cursor()
     
-    def add(self, name: str, plan: str, type: str):
+    def add(self, name: str, plan: str, type: str, age: int):
         
         """
         Função para adicionar
         um usuário na tabela
         """
         
-        self.__cursor.execute(f'INSERT INTO usuarios (name, plan, type) VALUES ("{name}", "{plan}", "{type}");')
+        self.__cursor.execute(f'INSERT INTO usuarios (name, plan, type, age) VALUES ("{name}", "{plan}", "{type}", {age});')
         self.__conexao.commit()
         
     def get_all(self):
@@ -39,6 +39,12 @@ class User:
     
     def update_id(self, id: int, name: int):
         
+        """
+        Função para atualizar
+        o id de algum usuário da
+        tabela
+        """
+        
         self.__cursor.execute(f'UPDATE usuarios SET id = {id} WHERE name = "{name}"')
         self.__conexao.commit()
     
@@ -46,7 +52,7 @@ class User:
         
         """
         Função para atualizar
-        o nome de algum filme
+        o nome de algum usuário
         da tabela
         """
         
@@ -57,8 +63,8 @@ class User:
         
         """
         Função para atualizar
-        a classificação indicativa de 
-        algum filme da tabela
+        o plano de algum usuário
+        da tabela
         """
         
         self.__cursor.execute(f'UPDATE usuarios SET plan = "{plan}" WHERE name = "{name}"')
@@ -69,11 +75,22 @@ class User:
         
         """
         Função para atualizar
-        a descrição de algum
-        filme da tabela
+        o tipo de algum usuário
+        da tabela
         """
         
         self.__cursor.execute(f'UPDATE usuarios SET type = "{type}" WHERE name = "{name}"')
+        self.__conexao.commit()
+        
+    def update_age(self, name: str, age: int):
+        
+        """
+        Função para atualizar
+        a idade de algum usuário
+        da tabela
+        """
+        
+        self.__cursor.execute(f'UPDATE usuarios SET age = "{age}" WHERE name = "{name}"')
         self.__conexao.commit()
     
     def remove_all(self):
@@ -127,7 +144,7 @@ def Create():
     
     print("\x1b[2J\x1b[1;1H", end="")
     user = User()
-    user.add(name=input("Digite o nome do usuário: "), plan=input("Digite o plano: "), type=input("Digite o tipo do usuário: "))
+    user.add(name=input("Enter username: "), plan=input("Enter user plan:  "), type=input("Enter user type: "), age=input("Enter user age: "))
     
 def Read():
     
@@ -139,7 +156,7 @@ def Read():
     questions = [
         inquirer.List('option',
                         message="What do you want to do?",
-                        choices=['LER USUÁRIOS', 'LER USUÁRIO DO ÍNDICE', 'SAIR'],
+                        choices=['READ USERS', 'READ USER', 'READ USER FROM AGE', 'BACK'],
                     ),
         ]
     
@@ -147,12 +164,11 @@ def Read():
     user = User()
     
     print("\x1b[2J\x1b[1;1H", end="")
-    if answers['option'] == "LER USUÁRIOS":
-        print("Todos os usuários: ",user.get_all())
+    if answers['option'] == "READ USERS":
+        print("All users: ",user.get_all())
         
-    elif answers['option'] == "LER USUÁRIO DO ÍNDICE":
-        id = int(input("Digite o índice do usuário desejado: "))
-        print(f"Usuário no índice {id}: ",user.get_user(id))
+    elif answers['option'] == "READ USER":
+        print(f"User informations: ",user.get_user(id=input("Input user ID: ")))
 
     else:
         exit()
@@ -163,7 +179,7 @@ def Update():
         questions = [
                 inquirer.List('option',
                                 message="What do you want to do?",
-                                choices=['ATUALIZAR ID', 'ATUALIZAR NOME', 'ATUALIZAR PLANO', 'ATUALIZAR TIPO', 'BACK'],
+                                choices=['UPDATE ID', 'UPDATE NAME', 'UPDATE PLAN', 'UPDATE TYPE', 'UPDATE AGE', 'BACK'],
                             ),
                 ]
             
@@ -173,17 +189,20 @@ def Update():
         user = User()
         
         print("\x1b[2J\x1b[1;1H", end="")
-        if choice == 'ATUALIZAR ID':
-            user.update_id(id=input("Digite o novo ID: "), name=input("Digite o nome de usuário: "))
+        if choice == 'UPDATE ID':
+            user.update_id(id=input("Enter new ID: "), name=input("Enter the username: "))
             
-        elif choice == 'ATUALIZAR NOME':
-            user.update_name(name=input("Digite o novo nome de usuário: "), id= input("ID do usuário: "))
+        elif choice == 'UPDATE NAME':
+            user.update_name(name=input("Enter new username "), id= input("User ID: "))
             
-        elif choice == 'ATUALIZAR PLANO':
-            user.update_plan(plan=input("Digite o novo plano do usuário: "), name= input("nome do usuário: "))
+        elif choice == 'UPDATE PLAN':
+            user.update_plan(plan=input("Enter new user plan: "), name= input("username: "))
             
-        elif choice == 'ATUALIZAR TIPO':
-            user.update_type(type=input("Digite o novo tipo do usuário: "), name= input("nome do usuário: "))
+        elif choice == 'UPDATE TYPE':
+            user.update_type(type=input("Enter new usesr type "), name= input("username: "))
+            
+        elif choice == 'UPDATE AGE':
+            user.update_age(age=input("Enter new age: "), name=input("username: "))
             
         else:
             break
@@ -202,7 +221,7 @@ def Delete():
         questions = [
                 inquirer.List('option',
                                 message="What do you want to do?",
-                                choices=['DELETAR TODOS OS USUÁRIOS', 'DELETAR USUÁRIO', 'BACK'],
+                                choices=['DELETE ALL USERS', 'DELETER USER', 'BACK'],
                             ),
                 ]
             
@@ -212,11 +231,11 @@ def Delete():
         user = User()
         
         print("\x1b[2J\x1b[1;1H", end="")
-        if choice == 'DELETAR TODOS OS USUÁRIOS':
+        if choice == 'DELETE ALL USERS':
             user.remove_all()
             
-        elif choice == 'DELETAR USUÁRIO':
-            user.remove_user(name= input("Digite o nome do usuário: "))
+        elif choice == 'DELETE USER':
+            user.remove_user(name= input("Enter username: "))
             
         else:
             break
@@ -226,21 +245,23 @@ def menu_users():
     questions = [
         inquirer.List('option',
                         message="What do you want to do?",
-                        choices=['CADASTRAR USUÁRIOS', 'UPDATE USER', 'REMOVE USER', 'SAIR'],
+                        choices=['REGISTER USERS', 'UPDATE USER', 'REMOVE USER', 'BACK'],
                     ),
         ]
     
     answers = inquirer.prompt(questions)
     choice = answers ['option']
     
-    print("\x1b[2J\x1b[1;1H", end="")
-    if choice == 'CADASTRAR USUÁRIOS':
+    if choice == 'REGISTER USERS':
+        print("\x1b[2J\x1b[1;1H", end="")
         Create()
     
     elif choice == 'UPDATE USER':
+        print("\x1b[2J\x1b[1;1H", end="")
         Update()
         
     elif choice == 'REMOVE USER':
+        print("\x1b[2J\x1b[1;1H", end="")
         Delete()
     
     else:
@@ -253,7 +274,7 @@ def Login():
     while True:
         list_user = []
         users = User()
-        id_user = int(input("Input your id: "))
+        id_user = int(input("Enter your ID: "))
             
         user = users.get_user(id=id_user)
         list_user.append(id_user)
@@ -265,7 +286,11 @@ def Login():
         list_user.append(plan)
         type = input("Type: ")
         list_user.append(type)
+        age = int(input("Age: "))
+        list_user.append(age)
         
+        print(str)
+        print(list_user)
         list_user = tuple(list_user)  
 
         print("\x1b[2J\x1b[1;1H", end="")

@@ -1,7 +1,7 @@
 import mysql.connector
 
 try:
-    conexao = mysql.connector.connect(user='nslvj2e7xmgdguvabtl0', password='pscale_pw_7xkV1dhLie6HzIGysMvkBLaiOg8U79hSXApOkzqPxHa', host='aws.connect.psdb.cloud', database='netflix')
+    conexao = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='netflix')
     cursor = conexao.cursor()
     
 except Exception as e:
